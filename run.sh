@@ -11,6 +11,4 @@
 
 source ../dl_env/bin/activate
 
-pip install git+https://github.com/AMLab-Amsterdam/lie_learn.git
-
 python -u train.py $1

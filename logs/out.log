@@ -1,31 +1,3 @@
-Collecting git+https://github.com/AMLab-Amsterdam/lie_learn.git
-  Cloning https://github.com/AMLab-Amsterdam/lie_learn.git to /tmp/pip-req-build-3czs1kgv
-  Running command git clone --filter=blob:none --quiet https://github.com/AMLab-Amsterdam/lie_learn.git /tmp/pip-req-build-3czs1kgv
-  Resolved https://github.com/AMLab-Amsterdam/lie_learn.git to commit edf012f5f60af320175d2e6269db78b984b5bfc3
-  Installing build dependencies: started
-  Installing build dependencies: finished with status 'done'
-  Getting requirements to build wheel: started
-  Getting requirements to build wheel: finished with status 'done'
-  Preparing metadata (pyproject.toml): started
-  Preparing metadata (pyproject.toml): finished with status 'done'
-Requirement already satisfied: numpy in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from lie_learn==0.0.2) (2.2.6)
-Requirement already satisfied: requests in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from lie_learn==0.0.2) (2.32.5)
-Requirement already satisfied: scipy in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from lie_learn==0.0.2) (1.15.3)
-Requirement already satisfied: certifi>=2017.4.17 in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from requests->lie_learn==0.0.2) (2026.1.4)
-Requirement already satisfied: idna<4,>=2.5 in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from requests->lie_learn==0.0.2) (3.20)
-Requirement already satisfied: urllib3<3,>=1.21.1 in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from requests->lie_learn==0.0.2) (2.6.3)
-Requirement already satisfied: charset_normalizer<4,>=2 in /work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages (from requests->lie_learn==0.0.2) (3.4.4)
-Building wheels for collected packages: lie_learn
-  Building wheel for lie_learn (pyproject.toml): started
-  Building wheel for lie_learn (pyproject.toml): finished with status 'done'
-  Created wheel for lie_learn: filename=lie_learn-0.0.2-cp310-cp310-linux_x86_64.whl size=16639450 sha256=55812d5ff47ed708a194b8d10e59594daa73d0cd22dd727c5391aced0f5caa68
-  Stored in directory: /tmp/pip-ephem-wheel-cache-7ra4zsfj/wheels/3d/88/b6/f7b56698a90e36f35cfa7ddd539f10c1053e573db1737fe456
-Successfully built lie_learn
-Installing collected packages: lie_learn
-Successfully installed lie_learn-0.0.2
-
-[notice] A new release of pip available: 22.3.1 -> 26.3
-[notice] To update, run: pip install --upgrade pip
 #params 154550
 compute 0.pkl.gz... Traceback (most recent call last):
   File "/work/classes/ai4200-001-2026f/fgdoane42/AI4200-Project2-SphericalCNN/s2cnn/utils/decorator.py", line 91, in wrapper
@@ -63,9 +35,6 @@ Traceback (most recent call last):
     dss = _setup_s2_fft(b, nl, weighted)
   File "/work/classes/ai4200-001-2026f/fgdoane42/AI4200-Project2-SphericalCNN/s2cnn/utils/decorator.py", line 97, in wrapper
     result = func(*args)
-  File "/work/classes/ai4200-001-2026f/fgdoane42/AI4200-Project2-SphericalCNN/s2cnn/soft/s2_fft.py", line 134, in _setup_s2_fft
-    d = wigner_d_matrix(l, beta,
-  File "/work/projects/bs-fgdoane42/fgdoane42/ml_env/lib/python3.10/site-packages/lie_learn/representations/SO3/wigner_d.py", line 29, in wigner_d_matrix
-    B = change_of_basis_matrix(
-  File "lie_learn/representations/SO3/irrep_bases.pyx", line 85, in lie_learn.representations.SO3.irrep_bases.change_of_basis_matrix
-AttributeError: module 'collections' has no attribute 'Iterable'
+  File "/work/classes/ai4200-001-2026f/fgdoane42/AI4200-Project2-SphericalCNN/s2cnn/soft/s2_fft.py", line 118, in _setup_s2_fft
+    from lie_learn.representations.SO3.wigner_d import wigner_d_matrix
+ModuleNotFoundError: No module named 'lie_learn.representations.SO3.wigner_d'
