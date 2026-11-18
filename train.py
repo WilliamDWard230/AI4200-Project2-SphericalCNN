@@ -5,6 +5,7 @@ import torch.utils.data as data_utils
 import gzip
 import pickle
 from model import S2ConvNet_original
+from torch import nn
 
 NUM_EPOCHS = 20
 BATCH_SIZE = 32
@@ -26,8 +27,11 @@ def load_data(path, batch_size):
         dataset["train"]["labels"].astype(np.int64))
 
     # TODO normalize dataset
-    # mean = train_data.mean()
-    # stdv = train_data.std()
+    mean = train_data.mean()
+    stdv = train_data.std()
+
+    train_data -= mean
+    train_data /= stdv
 
     train_dataset = data_utils.TensorDataset(train_data, train_labels)
     train_loader = data_utils.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -36,6 +40,12 @@ def load_data(path, batch_size):
         dataset["test"]["images"][:, None, :, :].astype(np.float32))
     test_labels = torch.from_numpy(
         dataset["test"]["labels"].astype(np.int64))
+
+    mean = test_data.mean()
+    stdv = test_data.std()
+
+    test_data -= mean
+    test_data /= stdv
 
     test_dataset = data_utils.TensorDataset(test_data, test_labels)
     test_loader = data_utils.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
