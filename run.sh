@@ -11,4 +11,5 @@
 
 source ../dl_env/bin/activate
 
+export PYTHONPATH="$PYTHONPATH:$(pwd)/lie_learn"
 python -u train.py $1
