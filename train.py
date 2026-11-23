@@ -17,6 +17,7 @@ BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
 
 MNIST_PATH = "s2_mnist.gz"
+CHECKPOINT_PATH = os.path.join("best_models", "spherical_best_model.pt")
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -76,6 +77,9 @@ def main():
         classifier.parameters(),
         lr=LEARNING_RATE)
 
+    os.makedirs(os.path.dirname(CHECKPOINT_PATH), exist_ok=True)
+    best_accuracy = -1.0
+
     for epoch in range(NUM_EPOCHS):
         for i, (images, labels) in enumerate(train_loader):
             classifier.train()
@@ -109,7 +113,18 @@ def main():
                 total += labels.size(0)
                 correct += (predicted == labels).long().sum().item()
 
-        print('Test Accuracy: {0}'.format(100 * correct / total))
+        accuracy = 100 * correct / total
+        print('Test Accuracy: {0:.2f}%'.format(accuracy))
+
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            torch.save({
+                "epoch": epoch + 1,
+                "model_state_dict": classifier.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "test_accuracy": accuracy,
+            }, CHECKPOINT_PATH)
+            print(f"Saved best model to {CHECKPOINT_PATH} (accuracy: {best_accuracy:.2f}%)")
 
 
 if __name__ == '__main__':
