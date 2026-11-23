@@ -10,7 +10,10 @@ import torch.nn.functional as F
 import torch
 import numpy as np
 import argparse
+import collections
+import collections.abc
 
+collections.Iterable = collections.abc.Iterable
 
 class S2ConvNet_original(nn.Module):
 

@@ -1,15 +1,16 @@
 #! /bin/bash
 
-#SBATCH --account=bs-fgdoane42
-#SBATCH --cpus-per-task=4
-#SBATCH --gpus-per-node=1
+#SBATCH --account=bs-wdward43
+#SBATCH --partition=batch-impulse
+#SBATCH --cpus-per-task=12
 #SBATCH --nodes=1
 #SBATCH --mem=32G
-#SBATCH --time=03:00:00
+#SBATCH --time=06:00:00
 #SBATCH --output=logs/out.log
 #SBATCH --error=logs/out.log
 
-source ../dl_env/bin/activate
+source ai4200-p1/bin/activate
 
-export PYTHONPATH="$PYTHONPATH:$(pwd)/lie_learn"
-python -u train.py $1
+python -u train.py 2>&1 | while IFS= read -r line; do
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $line"
+done

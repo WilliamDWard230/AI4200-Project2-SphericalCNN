@@ -1,6 +1,11 @@
 
 import numpy as np
+import os
 import torch
+
+torch.set_num_threads(
+    int(os.environ.get("SLURM_CPUS_PER_TASK", "8"))
+)
 import torch.utils.data as data_utils
 import gzip
 import pickle

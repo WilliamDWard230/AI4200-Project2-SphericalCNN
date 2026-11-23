@@ -1,1 +1,9 @@
 *__pycache__/*
+ai4200-p1/
+lie_learn_source/
+lie_learn_backup/
+cache/
+logs/
+__pycache__/
+*.pyc
+*.pt
