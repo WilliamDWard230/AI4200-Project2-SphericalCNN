@@ -12,6 +12,7 @@ project's wheel (so `import lie_learn` works after `pip install .`):
   3. copy the compiled lie_learn/ package, including the precomputed Wigner J
      matrices, into this wheel
   4. verify the imports that model.py needs
+  5. copy the repo's non-code files (s2_mnist.gz, model saves, ...) into the wheel
 
 (Earlier versions called `pip install` from inside the build. That can't work:
 pip hides the real environment, including pip itself, from isolated builds.)
@@ -44,6 +45,12 @@ LIE_LEARN_REPO = os.environ.get(
 )
 J_FILES = ("J_dense_0-150.npy", "J_block_0-150.npy")
 PH_SUBDIR = Path("representations") / "SO3" / "pinchon_hoggan"
+
+# Non-code files in the repo (s2_mnist.gz, model saves, ...) are copied into the
+# wheel at the same relative paths, so code that locates them relative to its own
+# __file__ behaves the same installed as in the repo. Edit these to taste.
+DATA_SKIP_DIRS = {"build", "dist", "cache", "logs", "lie_learn", "node_modules", "__pycache__"}
+DATA_SKIP_SUFFIXES = {".py", ".pyc", ".pyo", ".sh", ".md", ".rst", ".toml", ".cfg", ".log", ".out", ".err"}
 
 # Run in a subprocess: same imports as the "confirm critical imports" step of
 # setup.sh, plus a check that the J matrices are really there.
@@ -168,17 +175,42 @@ def install_lie_learn(build_lib, editable=False):
         raise
 
 
+def copy_repo_data(build_lib):
+    """Copy every non-code file in the repo into the wheel, keeping relative paths."""
+    build_lib = Path(build_lib).resolve()
+    copied = []
+    total = 0
+    for root, dirs, files in os.walk(HERE):
+        dirs[:] = sorted(
+            d for d in dirs
+            if not (d.startswith(".") or d in DATA_SKIP_DIRS or d.endswith(".egg-info"))
+        )
+        for name in sorted(files):
+            src = Path(root) / name
+            if name.startswith(".") or src.suffix in DATA_SKIP_SUFFIXES or not src.is_file():
+                continue
+            rel = src.relative_to(HERE)
+            dest = build_lib / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+            copied.append(rel.as_posix())
+            total += src.stat().st_size
+    _log(f"[setup] bundled {len(copied)} data files ({total / 1e6:.1f} MB):")
+    for rel in copied[:25]:
+        _log(f"[setup]   {rel}")
+    if len(copied) > 25:
+        _log(f"[setup]   ... and {len(copied) - 25} more")
+
+
 class BuildPy(build_py):
     """Build this package as usual, then bundle a compiled lie_learn into it."""
 
     def run(self):
         super().run()
-
-        data = HERE / "s2_mnist.gz"
-        if data.is_file():
-            shutil.copy2(data, Path(self.build_lib) / "s2_mnist.gz")
-
-        install_lie_learn(self.build_lib, editable=getattr(self, "editable_mode", False))
+        editable = getattr(self, "editable_mode", False)
+        if not editable:  # editable installs use the repo's files directly
+            copy_repo_data(self.build_lib)
+        install_lie_learn(self.build_lib, editable=editable)
 
 
 class BinaryDistribution(Distribution):
