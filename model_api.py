@@ -18,8 +18,8 @@ d_models = {
 }
 
 d_model_paths = {
-    "symmetric": path.join("best_models", "spherical_best_model.pt"),
-    "baseline": path.join("best_models", "standard_best_model.pt")
+    "symmetric": path.join(path.dirname(path.abspath(__file__)), "best_models", "spherical_best_model.pt"),
+    "baseline": path.join(path.dirname(path.abspath(__file__)), "best_models", "standard_best_model.pt")
 }
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -45,7 +45,7 @@ def load_model(kind):   # kind is "symmetric" or "baseline"
 def sample_batch(size=128):
     """Return a few test examples installed with the package, on the same device as the model."""
 
-    DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "s2_mnist.gz")
+    DATA_PATH = path.join(path.dirname(path.abspath(__file__)), "s2_mnist.gz")
 
     with gzip.open(DATA_PATH, 'rb') as f:
         dataset = pickle.load(f)
