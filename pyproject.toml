@@ -1,4 +1,34 @@
+# Metadata + dependencies live here. Package discovery and the lie_learn
+# build step live in setup.py.
 
 [build-system]
-requires = ["setuptools>=64", "wheel", "Cython", "numpy"]
+# These are what setup.sh pip-installed before building lie_learn. They are
+# needed at *build* time because setup.py compiles lie_learn from source
+# (with build isolation off) and lie_learn's own setup.py imports them.
+requires = [
+    "setuptools>=64",
+    "wheel",
+    "Cython",
+    "numpy",
+    "scipy",
+    "requests",
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "sphericalcnn"          # placeholder: rename to match your repo
+version = "0.1.0"
+description = "Spherical CNN (S2CNN) training code"
+requires-python = ">=3.10"
+
+# NOTE: lie_learn is deliberately NOT listed here. It can't be installed as a
+# normal pip dependency (build-isolation failure + missing Wigner J matrices),
+# so setup.py builds it from source during the build, exactly like setup.sh.
+dependencies = [
+    "numpy",
+    "scipy",
+    "requests",
+    "Cython",
+    "torch",
+    "torchvision",
+]
