@@ -59,7 +59,7 @@ def sample_batch(size=8):
     data -= mean
     data /= stdv
 
-    t_data = torch.tensor(data).to(DEVICE)
+    data = data.to(DEVICE)
 
-    return t_data
+    return data
 
