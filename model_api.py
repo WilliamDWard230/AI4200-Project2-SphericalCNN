@@ -42,7 +42,7 @@ def load_model(kind):   # kind is "symmetric" or "baseline"
 
     return model
 
-def sample_batch(size=128):
+def sample_batch(size=8):
     """Return a few test examples installed with the package, on the same device as the model."""
 
     DATA_PATH = path.join(path.dirname(path.abspath(__file__)), "s2_mnist.gz")
@@ -51,7 +51,7 @@ def sample_batch(size=128):
         dataset = pickle.load(f)
 
     data = torch.from_numpy(
-        dataset["train"]["images"][:, None, :, :].astype(np.float32))[:size]
+        dataset["test"]["images"][:, None, :, :].astype(np.float32))[:size]
 
     mean = data.mean()
     stdv = data.std()
