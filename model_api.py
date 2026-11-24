@@ -6,6 +6,7 @@ import numpy as np
 from os import path
 import gzip
 import pickle
+from gendata import main as gen
 
 from model import S2ConvNet_original as symmetric
 from standard_model import StandardCNN as baseline
@@ -42,6 +43,9 @@ def load_model(kind):   # kind is "symmetric" or "baseline"
 
 def sample_batch(size=128):
     """Return a few test examples installed with the package, on the same device as the model."""
+
+    # generate the dataset
+    gen()
 
     with gzip.open("s2_mnist.gz", 'rb') as f:
         dataset = pickle.load(f)
