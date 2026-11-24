@@ -37,7 +37,7 @@ def load_model(kind):   # kind is "symmetric" or "baseline"
     # load model
     model = model_class()
     state_dict = torch.load(model_save_path)
-    model.load_state_dict(state_dict)
+    model.load_state_dict(state_dict["model_state_dict"])
     model = model.to(DEVICE)
 
     return model
