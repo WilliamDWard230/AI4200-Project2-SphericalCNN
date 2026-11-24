@@ -4,7 +4,8 @@
 [build-system]
 # These are what setup.sh pip-installed before building lie_learn. They are
 # needed at *build* time because setup.py compiles lie_learn from source
-# (with build isolation off) and lie_learn's own setup.py imports them.
+# (python setup.py build_ext --inplace) and lie_learn's own setup.py imports
+# them. pip installs them into a temporary build environment.
 requires = [
     "setuptools>=64",
     "wheel",
@@ -23,7 +24,8 @@ requires-python = ">=3.10"
 
 # NOTE: lie_learn is deliberately NOT listed here. It can't be installed as a
 # normal pip dependency (build-isolation failure + missing Wigner J matrices),
-# so setup.py builds it from source during the build, exactly like setup.sh.
+# so setup.py compiles it from source during the build and bundles it into this
+# package's wheel.
 dependencies = [
     "numpy",
     "scipy",
