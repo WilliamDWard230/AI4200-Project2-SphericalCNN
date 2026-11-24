@@ -173,6 +173,11 @@ class BuildPy(build_py):
 
     def run(self):
         super().run()
+
+        data = HERE / "s2_mnist.gz"
+        if data.is_file():
+            shutil.copy2(data, Path(self.build_lib) / "s2_mnist.gz")
+
         install_lie_learn(self.build_lib, editable=getattr(self, "editable_mode", False))
 
 

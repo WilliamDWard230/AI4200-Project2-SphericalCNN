@@ -3,6 +3,7 @@
 
 import torch
 import numpy as np
+import os
 from os import path
 import gzip
 import pickle
@@ -44,10 +45,9 @@ def load_model(kind):   # kind is "symmetric" or "baseline"
 def sample_batch(size=128):
     """Return a few test examples installed with the package, on the same device as the model."""
 
-    # generate the dataset
-    gen()
+    DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "s2_mnist.gz")
 
-    with gzip.open("s2_mnist.gz", 'rb') as f:
+    with gzip.open(DATA_PATH, 'rb') as f:
         dataset = pickle.load(f)
 
     data = torch.from_numpy(
