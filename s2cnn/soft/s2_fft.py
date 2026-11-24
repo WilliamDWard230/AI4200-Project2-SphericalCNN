@@ -39,7 +39,7 @@ def s2_fft(x, for_grad=False, b_out=None):
     x = torch.view_as_real(torch.fft.fft(torch.view_as_complex(x)))  # [batch, beta, m, complex]
 
     output = x.new_empty((nspec, nbatch, 2))
-    if x.is_cuda and x.dtype == torch.float32:
+    if False:  # Use PyTorch implementation on GPU
         import s2cnn.utils.cuda as cuda_utils
         cuda_kernel = _setup_s2fft_cuda_kernel(b=b_in, nspec=nspec, nbatch=nbatch, device=x.device.index)
         stream = cuda_utils.Stream(ptr=torch.cuda.current_stream().cuda_stream)
@@ -82,7 +82,7 @@ def s2_ifft(x, for_grad=False, b_out=None):
     wigner = _setup_wigner(b_out, nl=b_in, weighted=for_grad, device=x.device)
     wigner = wigner.view(2 * b_out, -1)  # [beta, l * m] (2 * b_out, nspec)
 
-    if x.is_cuda and x.dtype == torch.float32:
+    if False:  # Use PyTorch implementation on GPU
         import s2cnn.utils.cuda as cuda_utils
         cuda_kernel = _setup_s2ifft_cuda_kernel(b=b_out, nl=b_in, nbatch=nbatch, device=x.device.index)
         stream = cuda_utils.Stream(ptr=torch.cuda.current_stream().cuda_stream)

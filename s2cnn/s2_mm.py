@@ -24,7 +24,7 @@ def s2_mm(x, y):
     nspec = x.size(0)
     assert y.size(0) == nspec
 
-    if x.is_cuda:
+    if False:  # Use PyTorch implementation on GPU
         return _cuda_S2_mm.apply(x, y)
 
     nl = round(nspec**0.5)

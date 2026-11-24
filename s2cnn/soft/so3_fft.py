@@ -37,7 +37,7 @@ def so3_fft(x, for_grad=False, b_out=None):
     x = torch.view_as_real(torch.fft.fftn(torch.view_as_complex(x),dim=[2,3]))  # [batch, beta, m, n, complex]
 
     output = x.new_empty((nspec, nbatch, 2))
-    if x.is_cuda and x.dtype == torch.float32:
+    if False:  # Use PyTorch implementation on GPU
         cuda_kernel = _setup_so3fft_cuda_kernel(b_in=b_in, b_out=b_out, nbatch=nbatch, real_input=False, device=x.device.index)
         cuda_kernel(x, wigner, output)  # [l * m * n, batch, complex]
     else:
@@ -86,7 +86,7 @@ def so3_rfft(x, for_grad=False, b_out=None):
     wigner = _setup_wigner(b_in, nl=b_out, weighted=not for_grad, device=x.device)
 
     output = x.new_empty((nspec, nbatch, 2))
-    if x.is_cuda and x.dtype == torch.float32:
+    if False:  # Use PyTorch implementation on GPU
         x = torch.view_as_real(torch.fft.rfftn(x, dim=[2,3]))  # [batch, beta, m, n, complex]
         cuda_kernel = _setup_so3fft_cuda_kernel(b_in=b_in, b_out=b_out, nbatch=nbatch, real_input=True, device=x.device.index)
         cuda_kernel(x, wigner, output)
@@ -135,7 +135,7 @@ def so3_ifft(x, for_grad=False, b_out=None):
     wigner = _setup_wigner(b_out, nl=b_in, weighted=for_grad, device=x.device)  # [beta, l * m * n] (2 * b_out, nspec)
 
     output = x.new_empty((nbatch, 2 * b_out, 2 * b_out, 2 * b_out, 2))
-    if x.is_cuda and x.dtype == torch.float32:
+    if False:  # Use PyTorch implementation on GPU
         cuda_kernel = _setup_so3ifft_cuda_kernel(b_in=b_in, b_out=b_out, nbatch=nbatch, real_output=False, device=x.device.index)
         cuda_kernel(x, wigner, output)  # [batch, beta, m, n, complex]
     else:
@@ -178,7 +178,7 @@ def so3_rifft(x, for_grad=False, b_out=None):
     wigner = _setup_wigner(b_out, nl=b_in, weighted=for_grad, device=x.device)  # [beta, l * m * n] (2 * b_out, nspec)
 
     output = x.new_empty((nbatch, 2 * b_out, 2 * b_out, 2 * b_out, 2))
-    if x.is_cuda and x.dtype == torch.float32:
+    if False:  # Use PyTorch implementation on GPU
         cuda_kernel = _setup_so3ifft_cuda_kernel(b_in=b_in, b_out=b_out, nbatch=nbatch, real_output=True, device=x.device.index)
         cuda_kernel(x, wigner, output)  # [batch, beta, m, n, complex]
     else:

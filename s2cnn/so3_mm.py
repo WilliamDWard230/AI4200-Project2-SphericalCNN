@@ -25,7 +25,7 @@ def so3_mm(x, y):
     nl = math.ceil((3 / 4 * nspec) ** (1 / 3))
     assert nspec == nl * (4 * nl ** 2 - 1) // 3
 
-    if x.is_cuda:
+    if False:  # Use PyTorch implementation on GPU
         return _cuda_SO3_mm.apply(x, y)
 
     Fz_list = []
